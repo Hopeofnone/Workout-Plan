@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panithan — Full Body Workout Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0c0d0f;
+    --bg2: #131518;
+    --bg3: #1a1d22;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e6e0;
+    --muted: #6b6d72;
+    --accent: #c8f060;
+    --accent2: #7eb8f7;
+    --accent3: #f4a96a;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'Outfit', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 56px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -80px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,240,96,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 900px; margin: 0 auto; }
+  .header-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .header-tag::before {
+    content: '';
+    display: block;
+    width: 20px; height: 1px;
+    background: var(--accent);
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5.5vw, 54px);
+    font-weight: 400;
+    line-height: 1.08;
+    margin-bottom: 14px;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .header-sub {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.65;
+  }
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .stat-val {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-val span { color: var(--accent); font-size: 12px; }
+  .stat-label {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 40px 80px; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .schedule-section { padding: 36px 0 0; }
+
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .cal-day {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.18s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cal-day:hover:not(.rest-day):not(.active) {
+    border-color: var(--border2);
+    background: var(--bg3);
+  }
+  .cal-day.active {
+    background: var(--bg3);
+    border-color: var(--accent);
+  }
+  .cal-day.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+  .cal-day.rest-day { opacity: 0.38; cursor: default; }
+  .cal-abbr {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .cal-day.active .cal-abbr { color: var(--accent); }
+  .cal-session {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.25;
+    display: block;
+  }
+  .cal-day.rest-day .cal-session { color: var(--muted); font-weight: 300; }
+
+  .session-panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    animation: fadeUp 0.22s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .session-head {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .session-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+  }
+  .session-focus {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  .session-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding-top: 2px;
+  }
+  .s-pill {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .s-pill.hi { border-color: rgba(200,240,96,0.4); color: var(--accent); }
+
+  .reset-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .reset-btn:hover { border-color: rgba(200,240,96,0.4); color: var(--accent); }
+
+  /* Progress bar */
+  .progress-bar-wrap {
+    padding: 12px 24px 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .progress-bar-track {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+  .progress-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  .muscle-blocks { padding: 6px 0; }
+  .muscle-group { border-bottom: 1px solid var(--border); }
+  .muscle-group:last-child { border-bottom: none; }
+  .muscle-header {
+    padding: 10px 24px 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .muscle-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .muscle-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .muscle-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: rgba(200,240,96,0.1);
+    color: var(--accent);
+  }
+
+  /* EXERCISE ROW */
+  .ex-item {
+    display: grid;
+    grid-template-columns: 46px 1fr auto;
+    gap: 10px;
+    align-items: start;
+    padding: 10px 24px 10px 24px;
+    transition: background 0.13s, opacity 0.2s;
+  }
+  .ex-item:hover { background: rgba(255,255,255,0.02); }
+  .ex-item.done { opacity: 0.38; }
+  .ex-item.done .ex-name {
+    text-decoration: line-through;
+    text-decoration-color: var(--muted);
+  }
+
+  .ex-check-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    padding-top: 2px;
+  }
+  .ex-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .ex-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.15s;
+  }
+  .ex-checkbox:hover {
+    border-color: var(--accent);
+    background: rgba(200,240,96,0.06);
+  }
+  .ex-checkbox:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .ex-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px; top: 1px;
+    width: 5px; height: 9px;
+    border: 2px solid #0c0d0f;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+
+  .ex-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .ex-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tag-compound  { background: rgba(126,184,247,0.1); color: var(--accent2); }
+  .tag-isolation { background: rgba(255,255,255,0.05); color: var(--muted); }
+  .tag-priority  { background: rgba(200,240,96,0.1); color: var(--accent); }
+  .tag-core      { background: rgba(244,169,106,0.1); color: var(--accent3); }
+  .tag-cali      { background: rgba(244,169,106,0.14); color: var(--accent3); }
+
+  .ex-detail { font-size: 12px; color: var(--muted); line-height: 1.45; }
+  .ex-sets {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--bg3);
+    padding: 4px 9px;
+    border-radius: 6px;
+    white-space: nowrap;
+    border: 1px solid var(--border);
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .principles-section { padding: 44px 0 0; }
+  .p-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .p-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .p-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
+  .p-val { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; }
+  .p-val.hi { color: var(--accent); }
+
+  .nutr-bar {
+    margin-top: 44px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: 1fr repeat(4, auto);
+    gap: 20px;
+    align-items: center;
+  }
+  .nutr-title { font-size: 13px; font-weight: 500; }
+  .nutr-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .nutr-stat  { text-align: center; }
+  .nutr-val   { font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--accent); }
+  .nutr-lbl   { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+
+  .rotation-note {
+    margin-top: 44px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+  }
+  .rotation-title { font-size: 13px; font-weight: 500; margin-bottom: 10px; }
+  .rotation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .rot-card {
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+  }
+  .rot-letter {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .rot-name { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .rot-focus { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 22px 40px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  footer span { color: var(--accent); }
+
+  @media (max-width: 620px) {
+    header, .container { padding-left: 18px; padding-right: 18px; }
+    footer { padding-left: 18px; padding-right: 18px; }
+    .calendar { grid-template-columns: repeat(7,1fr); gap: 3px; }
+    .cal-session { font-size: 8px; }
+    .ex-item { grid-template-columns: 46px 1fr; }
+    .ex-sets { display: none; }
+    .p-grid { grid-template-columns: 1fr 1fr; }
+    .nutr-bar { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .rotation-grid { grid-template-columns: 1fr; }
+    .session-head { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-tag">Evolt 360 · Scan 25 Mar 2026 · Every-other-day plan</div>
+    <h1>Full body<br><em>every session</em></h1>
+    <p class="header-sub">Three rotating full-body workouts — no barbell needed. Dumbbells, cables, and machines only. Each session trains every major muscle group but shifts the emphasis so you grow proportionally. Train one day, rest one day, repeat.</p>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-val">58.8<span> kg</span></div>
+        <div class="stat-label">Current weight</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">28.9<span> kg</span></div>
+        <div class="stat-label">Skeletal muscle</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">12.4<span>%</span></div>
+        <div class="stat-label">Body fat</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">8.9<span>/10</span></div>
+        <div class="stat-label">BWI score</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="schedule-section">
+    <div class="section-label">Example week — tap a workout day</div>
+    <div class="calendar" id="calendar">
+      <div class="cal-day active" data-idx="0" onclick="showSession(0)">
+        <span class="cal-abbr">Mon</span>
+        <span class="cal-session">Session A</span>
+      </div>
+      <div class="cal-day rest-day">
+        <span class="cal-abbr">Tue</span>
+        <span class="cal-session">Rest</span>
+      </div>
+      <div class="cal-day" data-idx="1" onclick="showSession(1)">
+        <span class="cal-abbr">Wed</span>
+        <span class="cal-session">Session B</span>
+      </div>
+      <div class="cal-day rest-day">
+        <span class="cal-abbr">Thu</span>
+        <span class="cal-session">Rest</span>
+      </div>
+      <div class="cal-day" data-idx="2" onclick="showSession(2)">
+        <span class="cal-abbr">Fri</span>
+        <span class="cal-session">Session C</span>
+      </div>
+      <div class="cal-day rest-day">
+        <span class="cal-abbr">Sat</span>
+        <span class="cal-session">Rest</span>
+      </div>
+      <div class="cal-day" data-idx="0" onclick="showSession(0)">
+        <span class="cal-abbr">Sun</span>
+        <span class="cal-session">Session A</span>
+      </div>
+    </div>
+
+    <div id="sessionPanel"></div>
+  </div>
+
+  <div class="rotation-note">
+    <div class="rotation-title">How the 3-session rotation works</div>
+    <div class="rotation-grid">
+      <div class="rot-card">
+        <div class="rot-letter">A</div>
+        <div class="rot-name">Strength focus</div>
+        <div class="rot-focus">Heavier loads, lower reps (6–8). Dumbbell press, leg press, weighted pull-ups — big compounds, no barbell needed.</div>
+      </div>
+      <div class="rot-card">
+        <div class="rot-letter">B</div>
+        <div class="rot-name">Hypertrophy focus</div>
+        <div class="rot-focus">Moderate weight, 10–12 reps. Dumbbell work, cables, pull-ups & dips — maximising time under tension.</div>
+      </div>
+      <div class="rot-card">
+        <div class="rot-letter">C</div>
+        <div class="rot-name">Aesthetic focus</div>
+        <div class="rot-focus">Higher reps, 12–15. Arms, shoulders, abs — the priority muscles from your scan.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="principles-section">
+    <div class="section-label">Training principles</div>
+    <div class="p-grid">
+      <div class="p-card"><div class="p-label">Schedule</div><div class="p-val hi">1 on · 1 off · repeat</div></div>
+      <div class="p-card"><div class="p-label">Sessions per week</div><div class="p-val">3 – 4 (flexible)</div></div>
+      <div class="p-card"><div class="p-label">Each muscle group</div><div class="p-val">Hit 2× per week</div></div>
+      <div class="p-card"><div class="p-label">Session A reps</div><div class="p-val">6 – 8 (strength)</div></div>
+      <div class="p-card"><div class="p-label">Session B reps</div><div class="p-val">10 – 12 (hypertrophy)</div></div>
+      <div class="p-card"><div class="p-label">Session C reps</div><div class="p-val">12 – 15 (aesthetic)</div></div>
+      <div class="p-card"><div class="p-label">Rest between sets</div><div class="p-val">90 sec (A) · 60 sec (B/C)</div></div>
+      <div class="p-card"><div class="p-label">Progressive overload</div><div class="p-val">+2.5 kg every 1–2 weeks</div></div>
+      <div class="p-card"><div class="p-label">Session duration</div><div class="p-val">55 – 65 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="nutr-bar">
+    <div>
+      <div class="nutr-title">Daily nutrition targets</div>
+      <div class="nutr-sub">From your scan — muscle gain goal</div>
+    </div>
+    <div class="nutr-stat"><div class="nutr-val">2,682–2,782</div><div class="nutr-lbl">Calories</div></div>
+    <div class="nutr-stat"><div class="nutr-val">201–209g</div><div class="nutr-lbl">Protein 30%</div></div>
+    <div class="nutr-stat"><div class="nutr-val">302–313g</div><div class="nutr-lbl">Carbs 45%</div></div>
+    <div class="nutr-stat"><div class="nutr-val">75–77g</div><div class="nutr-lbl">Fat 25%</div></div>
+  </div>
+
+</div>
+
+<footer>
+  Generated from Evolt 360 body scan · <span>Panithan</span> · 27M · 170 cm · Jetts 24hr Fitness
+</footer>
+
+<script>
+const checkState = {};
+
+const sessions = [
+  // ── SESSION A (unchanged) ──────────────────────────────────────────────────
+  {
+    letter: "A",
+    title: "Session A — Strength",
+    focus: "Heavy dumbbell & machine compounds · 6–8 reps · 90 sec rest",
+    duration: "60 min",
+    groups: [
+      {
+        name: "Chest", color: "#7eb8f7", priority: false,
+        exercises: [
+          { n:"01", name:"Dumbbell bench press",            detail:"Heavier than cables — better pec stretch at the bottom, more freedom for your joints", sets:"4 × 6–8",  tag:"compound" },
+          { n:"02", name:"Incline dumbbell press",          detail:"Upper chest fullness — a priority area from your scan, go as heavy as you can control", sets:"3 × 8",    tag:"priority" },
+        ]
+      },
+      {
+        name: "Back", color: "#c8f060", priority: false,
+        exercises: [
+          { n:"03", name:"Lat pulldown (wide grip)",        detail:"Same lat width stimulus as pull-ups — load it heavy enough that 6–8 reps is a real challenge", sets:"4 × 6–8", tag:"compound" },
+          { n:"04", name:"Cable seated row (wide bar)",     detail:"Replaces barbell row — constant tension through full range, safer on lower back", sets:"4 × 6–8",  tag:"compound" },
+        ]
+      },
+      {
+        name: "Shoulders", color: "#f4a96a", priority: true,
+        exercises: [
+          { n:"05", name:"Seated dumbbell press",           detail:"Replaces barbell press — greater ROM, each arm works independently, no rack needed", sets:"4 × 6–8",  tag:"compound" },
+          { n:"06", name:"Lateral raise (dumbbell)",        detail:"Side delt width — the #1 aesthetic priority from your scan", sets:"3 × 10",   tag:"priority" },
+        ]
+      },
+      {
+        name: "Legs", color: "#7eb8f7", priority: false,
+        exercises: [
+          { n:"07", name:"Leg press (feet shoulder-width)", detail:"Replaces barbell squat — heavy quad loading with no rack needed, full depth", sets:"4 × 6–8",  tag:"compound" },
+          { n:"08", name:"Dumbbell Romanian deadlift",      detail:"Replaces barbell RDL — better hamstring stretch, easier to load unilaterally", sets:"3 × 8",    tag:"compound" },
+        ]
+      },
+      {
+        name: "Arms", color: "#c8f060", priority: true,
+        exercises: [
+          { n:"09", name:"Dumbbell curl (heavy)",           detail:"Replaces barbell curl — each arm works independently, better wrist comfort", sets:"3 × 8",    tag:"priority" },
+          { n:"10", name:"Dumbbell skull crusher",          detail:"Lie on a flat bench, lower dumbbells to temples — heavy long head loading, great for arm thickness", sets:"3 × 8", tag:"priority" },
+        ]
+      },
+    ]
+  },
+
+  // ── SESSION B (updated) ────────────────────────────────────────────────────
+  {
+    letter: "B",
+    title: "Session B — Hypertrophy",
+    focus: "Moderate load, time under tension · 10–12 reps · 60 sec rest",
+    duration: "60 min",
+    groups: [
+      {
+        name: "Chest", color: "#7eb8f7", priority: false,
+        exercises: [
+          // REPLACED: cable chest press → slow-tempo dumbbell press
+          { n:"01", name:"Dumbbell bench press (3-sec lower)", detail:"No cable machine needed — use the same movement as Session A but with a deliberate 3-second lowering phase for maximum time under tension and hypertrophy stimulus", sets:"3 × 10–12", tag:"compound" },
+          // REPLACED: cable fly → dumbbell fly
+          { n:"02", name:"Dumbbell chest fly",               detail:"Pure pec stretch and squeeze — lower slowly to chest level, press and squeeze at the top. No cable machine needed, equally effective for isolation", sets:"3 × 12",    tag:"isolation" },
+        ]
+      },
+      {
+        name: "Back", color: "#c8f060", priority: false,
+        exercises: [
+          // CALISTHENICS: pull-ups replace lat pulldown here
+          { n:"03", name:"Pull-ups (bodyweight)",            detail:"Best back width builder there is — lean back slightly, drive elbows to hips. Use a resistance band if needed. Add a dumbbell between feet once 12 reps is easy", sets:"3 × 10–12", tag:"cali" },
+          { n:"04", name:"Single-arm dumbbell row",          detail:"Fixes left/right imbalance flagged in your segmental scan — each side works alone, full range of motion", sets:"3 × 10–12", tag:"compound" },
+        ]
+      },
+      {
+        name: "Shoulders", color: "#f4a96a", priority: true,
+        exercises: [
+          // REPLACED: Arnold press → Seated dumbbell press
+          { n:"05", name:"Seated dumbbell press",            detail:"Clean overhead press hitting all three delt heads — control the descent for full hypertrophy stimulus, greater ROM than a barbell", sets:"3 × 10–12", tag:"compound" },
+          { n:"06", name:"Cable lateral raise",              detail:"Constant tension on side delts through the full arc — superior to dumbbell version for hypertrophy", sets:"4 × 12",    tag:"priority" },
+          { n:"07", name:"Rear delt fly (machine)",          detail:"3D shoulder roundness — improves posture and back-shoulder width", sets:"3 × 12",    tag:"priority" },
+        ]
+      },
+      {
+        name: "Legs", color: "#7eb8f7", priority: false,
+        exercises: [
+          // REPLACED: Hack squat machine → Bulgarian split squat
+          { n:"08", name:"Bulgarian split squat (dumbbell)", detail:"Replaces hack squat machine — rear foot elevated on a bench, dumbbells in hands. Unilateral quad and glute loading that also corrects any leg imbalance. Same quad stimulus, no machine needed", sets:"3 × 10–12 each", tag:"compound" },
+          { n:"09", name:"Leg curl (lying or seated)",       detail:"Hamstring isolation — balances quad-to-hamstring ratio, hold the peak contraction for 1 sec", sets:"3 × 12",    tag:"isolation" },
+          // REPLACED: Calf raise standing machine → single-leg calf raise on step
+          { n:"10", name:"Single-leg calf raise on step",   detail:"Replaces standing calf machine — stand on edge of a step or platform, lower heel below for full stretch. Hold a dumbbell in the same-side hand for load. Same stimulus as the machine, zero equipment needed", sets:"3 × 15 each", tag:"isolation" },
+        ]
+      },
+      {
+        name: "Arms", color: "#c8f060", priority: true,
+        exercises: [
+          { n:"11", name:"Incline dumbbell curl",            detail:"Full long-head stretch — the best exercise for bicep peak development", sets:"3 × 10–12", tag:"priority" },
+          { n:"12", name:"Overhead cable tricep extension",  detail:"Long head stretch under load — the largest tricep head, key for overall arm size", sets:"3 × 10–12", tag:"priority" },
+          // CALISTHENICS: dips for tricep mass
+          { n:"13", name:"Parallel bar dips (tricep focus)", detail:"Lean torso upright, elbows close to body — heavy tricep and lower-chest compound. Add a dumbbell between your feet when bodyweight becomes easy for 12 reps", sets:"3 × 10–12", tag:"cali" },
+        ]
+      },
+    ]
+  },
+
+  // ── SESSION C (updated) ────────────────────────────────────────────────────
+  {
+    letter: "C",
+    title: "Session C — Aesthetic",
+    focus: "Higher reps, priority muscles · 12–15 reps · 60 sec rest",
+    duration: "55 min",
+    groups: [
+      {
+        name: "Chest", color: "#7eb8f7", priority: false,
+        exercises: [
+          // REPLACED: Incline cable press → Incline dumbbell press
+          { n:"01", name:"Incline dumbbell press",           detail:"Replaces incline cable press — upper chest definition and fullness. Use a slower, controlled tempo here; squeeze at the top of every rep for maximum chest activation", sets:"3 × 12–15", tag:"priority" },
+          { n:"02", name:"Pec deck machine",                 detail:"Pure chest isolation finisher — great pump, zero stabiliser fatigue. Squeeze and hold at the centre for 1 sec", sets:"3 × 15",    tag:"isolation" },
+        ]
+      },
+      {
+        name: "Back", color: "#c8f060", priority: false,
+        exercises: [
+          // CALISTHENICS: wide-grip pull-ups for lat sweep
+          { n:"03", name:"Wide-grip pull-ups (bodyweight)",  detail:"Best lat sweep builder — wide grip emphasises outer lats. 15 reps bodyweight? Add a dumbbell between your feet. Control the full descent for maximum stretch", sets:"3 × 12–15", tag:"cali" },
+          { n:"04", name:"Face pull (cable)",                detail:"Rear delt and rotator cuff health — protects your shoulder joint long-term and adds 3D thickness to the upper back", sets:"3 × 15",    tag:"isolation" },
+        ]
+      },
+      {
+        name: "Shoulders", color: "#f4a96a", priority: true,
+        exercises: [
+          { n:"05", name:"Cable lateral raise",              detail:"Side delt isolation — width is the single biggest aesthetic lever for your physique. Keep the torso still", sets:"4 × 15",    tag:"priority" },
+          { n:"06", name:"Rear delt fly (dumbbell)",         detail:"Prone on incline bench — full rear delt stretch and squeeze, builds 3D shoulder roundness", sets:"3 × 15",    tag:"priority" },
+          { n:"07", name:"Dumbbell shrug",                   detail:"Upper trap — builds the neck-to-shoulder sweep that frames everything. Hold the top for 2 sec", sets:"3 × 15",    tag:"isolation" },
+        ]
+      },
+      {
+        name: "Legs", color: "#7eb8f7", priority: false,
+        exercises: [
+          { n:"08", name:"Leg extension",                    detail:"VMO focus — teardrop quad shape above the knee, squeeze hard at the top, lower slowly", sets:"3 × 15",    tag:"isolation" },
+          { n:"09", name:"Dumbbell goblet squat",            detail:"Great for quad sweep and glutes — hold dumbbell at chest, full depth. Pause 2 sec at the bottom for extra stimulus", sets:"3 × 12–15", tag:"compound" },
+          // REPLACED: Seated calf raise machine → dumbbell-on-knee seated calf raise
+          { n:"10", name:"Seated calf raise (dumbbell on knee)", detail:"Replaces seated calf machine — sit on a bench, place a heavy dumbbell on your knee, raise onto your toes. Targets the soleus (lower calf) identically to the machine. Hold the stretch at the bottom for 1 sec", sets:"3 × 20",    tag:"isolation" },
+        ]
+      },
+      {
+        name: "Arms + Core", color: "#c8f060", priority: true,
+        exercises: [
+          { n:"11", name:"EZ bar curl",                      detail:"Bicep mass — easier on the wrists than a straight bar, great for loading heavier than dumbbells", sets:"3 × 12",    tag:"priority" },
+          { n:"12", name:"Hammer curl (dumbbell)",           detail:"Brachialis — adds width and thickness between the bicep and tricep heads, makes arms look bigger from all angles", sets:"3 × 12",    tag:"priority" },
+          { n:"13", name:"Tricep rope pushdown",             detail:"Lateral head definition — spread the rope at the bottom for maximum squeeze at every rep", sets:"3 × 12–15", tag:"priority" },
+          // REPLACED: Cable crunch → Machine crunch (seated)
+          { n:"14", name:"Machine crunch (seated)",          detail:"Replaces cable crunch — weighted abs with a guided path. Exhale and squeeze hard at full contraction; don't let the weight control the return", sets:"3 × 15",    tag:"core" },
+          { n:"15", name:"Hanging leg raise",                detail:"Lower ab definition and hip flexor strength — control the descent, no swinging. Tuck the pelvis at the top for maximum lower ab activation", sets:"3 × 12",    tag:"core" },
+        ]
+      },
+    ]
+  }
+];
+
+const tagLabel = { compound:"Compound", isolation:"Isolation", priority:"Priority", core:"Core", cali:"Calisthenics" };
+
+function getKey(si, gi, ei) { return `${si}-${gi}-${ei}`; }
+
+function updateProgress(si) {
+  const s = sessions[si];
+  let total = 0, done = 0;
+  s.groups.forEach((g, gi) => {
+    g.exercises.forEach((_, ei) => {
+      total++;
+      if (checkState[getKey(si, gi, ei)]) done++;
+    });
+  });
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+  if (fill) fill.style.width = pct + '%';
+  if (label) label.textContent = done + ' / ' + total;
+}
+
+function toggleCheck(si, gi, ei) {
+  const key = getKey(si, gi, ei);
+  checkState[key] = !checkState[key];
+  const row = document.getElementById('ex-' + key);
+  const cb  = document.getElementById('cb-'  + key);
+  if (row) row.classList.toggle('done', checkState[key]);
+  if (cb)  cb.checked = checkState[key];
+  updateProgress(si);
+}
+
+function resetSession(si) {
+  const s = sessions[si];
+  s.groups.forEach((g, gi) => {
+    g.exercises.forEach((_, ei) => {
+      const key = getKey(si, gi, ei);
+      checkState[key] = false;
+      const row = document.getElementById('ex-' + key);
+      const cb  = document.getElementById('cb-'  + key);
+      if (row) row.classList.remove('done');
+      if (cb)  cb.checked = false;
+    });
+  });
+  updateProgress(si);
+}
+
+function showSession(idx) {
+  document.querySelectorAll('.cal-day[data-idx]').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.idx) === idx);
+  });
+
+  const s = sessions[idx];
+
+  const groupsHTML = s.groups.map((g, gi) => {
+    const exHTML = g.exercises.map((e, ei) => {
+      const key = getKey(idx, gi, ei);
+      const isDone = !!checkState[key];
+      return `
+        <div class="ex-item${isDone ? ' done' : ''}" id="ex-${key}">
+          <div class="ex-check-wrap">
+            <input type="checkbox" class="ex-checkbox" id="cb-${key}"
+              ${isDone ? 'checked' : ''}
+              onchange="toggleCheck(${idx},${gi},${ei})">
+            <span class="ex-num">${e.n}</span>
+          </div>
+          <div>
+            <div class="ex-name">${e.name}<span class="ex-tag tag-${e.tag}">${tagLabel[e.tag]}</span></div>
+            <div class="ex-detail">${e.detail}</div>
+          </div>
+          <div class="ex-sets">${e.sets}</div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="muscle-group">
+        <div class="muscle-header">
+          <div class="muscle-dot" style="background:${g.color};"></div>
+          <span class="muscle-name">${g.name}</span>
+          ${g.priority ? '<span class="muscle-badge">Priority</span>' : ''}
+        </div>
+        ${exHTML}
+      </div>`;
+  }).join('');
+
+  const total = s.groups.reduce((a, g) => a + g.exercises.length, 0);
+  let done = 0;
+  s.groups.forEach((g, gi) => g.exercises.forEach((_, ei) => { if (checkState[getKey(idx,gi,ei)]) done++; }));
+  const pct = total ? Math.round((done / total) * 100) : 0;
+
+  document.getElementById('sessionPanel').innerHTML = `
+    <div class="session-panel">
+      <div class="session-head">
+        <div>
+          <div class="session-title">${s.title}</div>
+          <div class="session-focus">${s.focus}</div>
+        </div>
+        <div class="session-pills">
+          <span class="s-pill hi">${s.letter}</span>
+          <span class="s-pill">${s.duration}</span>
+          <span class="s-pill">${total} exercises</span>
+          <button class="reset-btn" onclick="resetSession(${idx})">↺ Reset</button>
+        </div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressFill" style="width:${pct}%"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">${done} / ${total}</div>
+      </div>
+      <div class="muscle-blocks">${groupsHTML}</div>
+    </div>`;
+}
+
+showSession(0);
+</script>
+</body>
+</html>
